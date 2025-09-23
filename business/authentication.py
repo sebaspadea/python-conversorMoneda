@@ -1,6 +1,5 @@
 import bcrypt
-#from data.user_repository_json import UserRepositoryJSON as UserRepository
-from data.user_repository_db import UserRepositoryDB as UserRepository
+from data.user_repository import UserRepository
 from business.models import Usuario, Cuenta
 from decimal import Decimal
 

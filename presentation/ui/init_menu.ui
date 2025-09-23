@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InitMenu</class>
+ <widget class="QDialog" name="InitMenu">
+  <property name="geometry"><rect><x>0</x><y>0</y><width>400</width><height>300</height></rect></property>
+  <property name="windowTitle"><string>Bienvenido</string></property>
+  <property name="styleSheet"><string notr="true">QDialog{background:#1e1e1e;}</string></property>
+
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry"><rect><x>60</x><y>50</y><width>280</width><height>180</height></rect></property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="btnLogin">
+      <property name="text"><string>Login</string></property>
+      <property name="styleSheet"><string notr="true">QPushButton{background:#0e639c;border:none;border-radius:6px;padding:10px;color:#fff;font-size:14px;font-weight:bold;} QPushButton:hover{background:#1177bb;} QPushButton:pressed{background:#094771;}</string></property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnRegister">
+      <property name="text"><string>Registro</string></property>
+      <property name="styleSheet"><string notr="true">QPushButton{background:#0e639c;border:none;border-radius:6px;padding:10px;color:#fff;font-size:14px;font-weight:bold;} QPushButton:hover{background:#1177bb;} QPushButton:pressed{background:#094771;}</string></property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnExit">
+      <property name="text"><string>Salir</string></property>
+      <property name="styleSheet"><string notr="true">QPushButton{background:#c62828;border:none;border-radius:6px;padding:10px;color:#fff;font-size:14px;font-weight:bold;} QPushButton:hover{background:#e53935;} QPushButton:pressed{background:#8e0000;}</string></property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

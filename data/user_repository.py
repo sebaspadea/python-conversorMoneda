@@ -2,7 +2,8 @@ import sqlobject as SO
 from decimal import Decimal
 from business.models import Usuario, Cuenta
 
-DATABASE_URI = 'mysql://guest:1234@localhost/tp_integrador_spadea_exchange'
+DATABASE_URI = 'mysql://guest:1234@localhost:3306/tp_integrador_spadea_exchange?driver=pymysql&charset=utf8mb4'
+
 __connection__ = SO.connectionForURI(DATABASE_URI)
 SO.sqlhub.processConnection = __connection__
 
@@ -19,7 +20,7 @@ class Cuentas(SO.SQLObject):
 Usuarios.createTable(ifNotExists=True)
 Cuentas.createTable(ifNotExists=True)
 
-class UserRepositoryDB:
+class UserRepository:
     def load_user(self, username: str) -> Usuario | None:
         try:
             usuario_db = Usuarios.selectBy(username=username.lower()).getOne()

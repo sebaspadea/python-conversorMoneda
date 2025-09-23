@@ -1,7 +1,6 @@
 from decimal import Decimal, InvalidOperation
 from business.models import Cuenta, Usuario
-#from data.user_repository_json import UserRepositoryJSON as UserRepository
-from data.user_repository_db import UserRepositoryDB as UserRepository
+from data.user_repository import UserRepository
 from data.rates_repository import RatesRepository
 
 class AccountService:

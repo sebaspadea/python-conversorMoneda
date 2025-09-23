@@ -5,7 +5,7 @@ from business.models import Usuario, Cuenta
 USERS_DIR = Path("users")
 USERS_DIR.mkdir(exist_ok=True)
 
-class UserRepositoryJSON:
+class UserRepository:
     def load_user(self, username: str) -> Usuario | None:
         username_norm = username.lower()
         file_path = USERS_DIR / f"{username_norm}.json"

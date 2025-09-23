@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>360</width><height>200</height></rect>
+  </property>
+  <property name="windowTitle"><string>Nueva Cuenta</string></property>
+
+  <widget class="QComboBox" name="accountList">
+   <property name="geometry"><rect><x>30</x><y>30</y><width>300</width><height>32</height></rect>
+   </property>
+   <item><property name="text"><string>USD</string></property></item>
+   <item><property name="text"><string>EUR</string></property></item>
+   <item><property name="text"><string>ARS</string></property></item>
+   <item><property name="text"><string>BRL</string></property></item>
+   <item><property name="text"><string>BTC</string></property></item>
+  </widget>
+
+  <widget class="QDialogButtonBox" name="btnOKCancel">
+   <property name="geometry"><rect><x>30</x><y>120</y><width>300</width><height>32</height></rect></property>
+   <property name="standardButtons"><set>QDialogButtonBox::Ok|QDialogButtonBox::Cancel</set></property>
+  </widget>
+ </widget>
+
+ <connections>
+  <connection>
+   <sender>btnOKCancel</sender><signal>accepted()</signal>
+   <receiver>Dialog</receiver><slot>accept()</slot>
+  </connection>
+  <connection>
+   <sender>btnOKCancel</sender><signal>rejected()</signal>
+   <receiver>Dialog</receiver><slot>reject()</slot>
+  </connection>
+ </connections>
+</ui>
