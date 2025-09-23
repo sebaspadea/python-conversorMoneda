@@ -1,14 +1,13 @@
-from PyQt6.QtWidgets import QApplication, QDialog, QMainWindow, QTableWidgetItem, QMessageBox
+from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox
 import sys
 
 from presentation.screens.InitMenu_ui import Ui_InitMenu
 from presentation.screens.Login_ui import Ui_LoginDialog
 from presentation.screens.Register_ui import Ui_RegisterDialog
-from presentation.screens.Main_ui import Ui_MainWindow
-from presentation.screens.DialogAccounts import Ui_Dialog
 
 from business.authentication import Authenticator
 from data.rates_repository import RatesRepository
+from presentation.main_menu import MainMenu
 
 
 class InitMenu(QDialog, Ui_InitMenu):
@@ -49,44 +48,9 @@ class RegisterDialog(QDialog, Ui_RegisterDialog):
         self.btnBox.rejected.connect(self.reject)
 
 
-class DialogoCuenta(QDialog, Ui_Dialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setupUi(self)
-
-
-class VentanaPrincipal(QMainWindow, Ui_MainWindow):
-    def __init__(self, username: str):
-        super().__init__()
-        self.username = username
-        self.setupUi(self)
-        try:
-            self.AccountTable.horizontalHeader().setStretchLastSection(True)
-        except Exception:
-            pass
-        try:
-            self.btnAddAccount.clicked.connect(self.on_add_account)
-            self.btnBuy.clicked.connect(lambda: self.statusBar().showMessage("Comprar Moneda (pendiente de business)", 3000))
-            self.btnSell.clicked.connect(lambda: self.statusBar().showMessage("Vender Moneda (pendiente de business)", 3000))
-        except Exception:
-            pass
-        self.statusBar().showMessage(f"Sesión iniciada: {self.username}", 3000)
-        self.show()
-
-    def on_add_account(self):
-        dlg = DialogoCuenta(self)
-        if dlg.exec() == QDialog.DialogCode.Accepted:
-            moneda = getattr(dlg, "accountList").currentText()
-            row = self.AccountTable.rowCount()
-            self.AccountTable.insertRow(row)
-            self.AccountTable.setItem(row, 0, QTableWidgetItem(moneda))
-            self.AccountTable.setItem(row, 1, QTableWidgetItem("0.00"))
-
-
 class InitFlow:
     def __init__(self):
         self.app = None
-        self.window = None
         self.auth = Authenticator()
         self.rates_repo = RatesRepository()
 
@@ -102,19 +66,24 @@ class InitFlow:
                     continue
                 continue
             if menu.choice == "login":
-                ok = self._handle_login()
-                if ok:
-                    break
-                continue
-        sys.exit(self.app.exec())
+                ok, user = self._handle_login()
+                if not ok:
+                    continue
+                try:
+                    self.rates_repo.load_rates()
+                except Exception as e:
+                    QMessageBox.information(None, "Aviso", f"No se pudieron cargar las cotizaciones.\n{e}")
+                window = MainMenu(user)
+                window.show()
+                self.app.exec()
 
-    def _handle_login(self) -> bool:
-        login = LoginDialog()
+    def _handle_login(self):
+        dlg = LoginDialog()
         while True:
-            if login.exec() != QDialog.DialogCode.Accepted:
-                return False
-            username = login.txtUser.text().strip()
-            password = login.txtPass.text().strip()
+            if dlg.exec() != QDialog.DialogCode.Accepted:
+                return False, None
+            username = dlg.txtUser.text().strip()
+            password = dlg.txtPass.text().strip()
             if not username or not password:
                 QMessageBox.warning(None, "Error", "Completá usuario y contraseña.")
                 continue
@@ -122,14 +91,9 @@ class InitFlow:
             if not result:
                 QMessageBox.warning(None, "Login fallido", message)
                 continue
-            try:
-                self.rates_repo.load_rates()
-            except Exception as e:
-                QMessageBox.information(None, "Aviso", f"No se pudieron cargar las cotizaciones.\n{e}")
-            self.window = VentanaPrincipal(username=username)
-            return True
+            return True, user
 
-    def _handle_register(self) -> bool:
+    def _handle_register(self):
         dlg = RegisterDialog()
         while True:
             if dlg.exec() != QDialog.DialogCode.Accepted:

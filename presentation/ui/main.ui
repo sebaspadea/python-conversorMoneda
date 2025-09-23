@@ -3,46 +3,93 @@
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
-   <rect><x>0</x><y>0</y><width>800</width><height>600</height></rect>
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
   </property>
-  <property name="windowTitle"><string>Wallet FX</string></property>
-
+  <property name="windowTitle">
+   <string>Wallet FX</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
-     <rect><x>20</x><y>10</y><width>251</width><height>220</height></rect>
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>251</width>
+      <height>331</height>
+     </rect>
     </property>
     <layout class="QVBoxLayout" name="leftMenu">
      <item>
       <widget class="QPushButton" name="btnAddAccount">
-       <property name="text"><string>Crear Cuenta</string></property>
+       <property name="text">
+        <string>Crear Cuenta</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnDeposit">
+       <property name="text">
+        <string>Depositar ARS</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnBuy">
-       <property name="text"><string>Comprar Moneda</string></property>
+       <property name="text">
+        <string>Comprar Moneda</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnSell">
-       <property name="text"><string>Vender Moneda</string></property>
+       <property name="text">
+        <string>Vender Moneda</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnLogout">
+       <property name="text">
+        <string>Cerrar Sesión</string>
+       </property>
       </widget>
      </item>
     </layout>
    </widget>
-
    <widget class="QTableWidget" name="AccountTable">
     <property name="geometry">
-     <rect><x>300</x><y>10</y><width>480</width><height>520</height></rect>
+     <rect>
+      <x>300</x>
+      <y>10</y>
+      <width>480</width>
+      <height>520</height>
+     </rect>
     </property>
-    <column><property name="text"><string>Moneda</string></property></column>
-    <column><property name="text"><string>Monto</string></property></column>
+    <column>
+     <property name="text">
+      <string>Moneda</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Monto</string>
+     </property>
+    </column>
    </widget>
   </widget>
-
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
-    <rect><x>0</x><y>0</y><width>800</width><height>22</height></rect>
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>36</height>
+    </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
