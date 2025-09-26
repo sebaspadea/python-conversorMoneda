@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BuyDialog</class>
- <widget class="QDialog" name="BuyDialog">
+ <class>ChangeCurrencyDialog</class>
+ <widget class="QDialog" name="ChangeCurrencyDialog">
   <property name="geometry"><rect><x>0</x><y>0</y><width>380</width><height>220</height></rect></property>
-  <property name="windowTitle"><string>Comprar Moneda</string></property>
+  <property name="windowTitle"><string>Cambiar Moneda</string></property>
 
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry"><rect><x>20</x><y>20</y><width>340</width><height>160</height></rect></property>
@@ -14,7 +14,7 @@
     <item row="1" column="0"><widget class="QLabel" name="lblTo"><property name="text"><string>Moneda destino</string></property></widget></item>
     <item row="1" column="1"><widget class="QLineEdit" name="txtTo"><property name="placeholderText"><string>USD</string></property></widget></item>
 
-    <item row="2" column="0"><widget class="QLabel" name="lblAmount"><property name="text"><string>Cantidad destino</string></property></widget></item>
+    <item row="2" column="0"><widget class="QLabel" name="lblAmount"><property name="text"><string>Cantidad</string></property></widget></item>
     <item row="2" column="1"><widget class="QLineEdit" name="txtAmount"><property name="placeholderText"><string>ej: 100.00</string></property></widget></item>
 
     <item row="3" column="0" colspan="2">
@@ -26,8 +26,8 @@
   </widget>
 
   <connections>
-   <connection><sender>btnBox</sender><signal>accepted()</signal><receiver>BuyDialog</receiver><slot>accept()</slot></connection>
-   <connection><sender>btnBox</sender><signal>rejected()</signal><receiver>BuyDialog</receiver><slot>reject()</slot></connection>
+   <connection><sender>btnBox</sender><signal>accepted()</signal><receiver>ChangeCurrencyDialog</receiver><slot>accept()</slot></connection>
+   <connection><sender>btnBox</sender><signal>rejected()</signal><receiver>ChangeCurrencyDialog</receiver><slot>reject()</slot></connection>
   </connections>
  </widget>
  <resources/>

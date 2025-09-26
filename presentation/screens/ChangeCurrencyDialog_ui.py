@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'presentation/ui/buy_dialog.ui'
+# Form implementation generated from reading ui file 'presentation/ui/change_currency_dialog.ui'
 #
 # Created by: PyQt6 UI code generator 6.9.1
 #
@@ -9,11 +9,11 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_BuyDialog(object):
-    def setupUi(self, BuyDialog):
-        BuyDialog.setObjectName("BuyDialog")
-        BuyDialog.resize(380, 220)
-        self.layoutWidget = QtWidgets.QWidget(parent=BuyDialog)
+class Ui_ChangeCurrencyDialog(object):
+    def setupUi(self, ChangeCurrencyDialog):
+        ChangeCurrencyDialog.setObjectName("ChangeCurrencyDialog")
+        ChangeCurrencyDialog.resize(380, 220)
+        self.layoutWidget = QtWidgets.QWidget(parent=ChangeCurrencyDialog)
         self.layoutWidget.setGeometry(QtCore.QRect(20, 20, 340, 160))
         self.layoutWidget.setObjectName("layoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.layoutWidget)
@@ -42,15 +42,15 @@ class Ui_BuyDialog(object):
         self.btnBox.setObjectName("btnBox")
         self.gridLayout.addWidget(self.btnBox, 3, 0, 1, 2)
 
-        self.retranslateUi(BuyDialog)
-        QtCore.QMetaObject.connectSlotsByName(BuyDialog)
+        self.retranslateUi(ChangeCurrencyDialog)
+        QtCore.QMetaObject.connectSlotsByName(ChangeCurrencyDialog)
 
-    def retranslateUi(self, BuyDialog):
+    def retranslateUi(self, ChangeCurrencyDialog):
         _translate = QtCore.QCoreApplication.translate
-        BuyDialog.setWindowTitle(_translate("BuyDialog", "Comprar Moneda"))
-        self.lblFrom.setText(_translate("BuyDialog", "Moneda origen"))
-        self.txtFrom.setPlaceholderText(_translate("BuyDialog", "ARS"))
-        self.lblTo.setText(_translate("BuyDialog", "Moneda destino"))
-        self.txtTo.setPlaceholderText(_translate("BuyDialog", "USD"))
-        self.lblAmount.setText(_translate("BuyDialog", "Cantidad destino"))
-        self.txtAmount.setPlaceholderText(_translate("BuyDialog", "ej: 100.00"))
+        ChangeCurrencyDialog.setWindowTitle(_translate("ChangeCurrencyDialog", "Cambiar Moneda"))
+        self.lblFrom.setText(_translate("ChangeCurrencyDialog", "Moneda origen"))
+        self.txtFrom.setPlaceholderText(_translate("ChangeCurrencyDialog", "ARS"))
+        self.lblTo.setText(_translate("ChangeCurrencyDialog", "Moneda destino"))
+        self.txtTo.setPlaceholderText(_translate("ChangeCurrencyDialog", "USD"))
+        self.lblAmount.setText(_translate("ChangeCurrencyDialog", "Cantidad"))
+        self.txtAmount.setPlaceholderText(_translate("ChangeCurrencyDialog", "ej: 100.00"))

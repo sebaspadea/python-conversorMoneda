@@ -1,14 +1,13 @@
-# presentation/main_menu.py
 from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QInputDialog, QMessageBox, QDialog, QApplication
 from decimal import Decimal
 from business.account_service import AccountService
 from business.models import Usuario, Cuenta
 from data.rates_repository import RatesRepository
 from presentation.screens.Main_ui import Ui_MainWindow
-from presentation.screens.BuyDialog_ui import Ui_BuyDialog
+from presentation.screens.ChangeCurrencyDialog_ui import Ui_ChangeCurrencyDialog
 
 
-class DialogComprar(QDialog, Ui_BuyDialog):
+class ChangeCurrencyDialog(QDialog, Ui_ChangeCurrencyDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
@@ -27,86 +26,105 @@ class MainMenu(QMainWindow, Ui_MainWindow):
             self.AccountTable.horizontalHeader().setStretchLastSection(True)
         except Exception:
             pass
-
-        self.btnAddAccount.clicked.connect(self._crear_cuenta)   # ahora pide moneda a mano
-        self.btnDeposit.clicked.connect(self._depositar_ars)
-        self.btnBuy.clicked.connect(self._comprar_moneda)
-        self.btnSell.clicked.connect(lambda: self.statusBar().showMessage("Pendiente: Vender Moneda", 3000))
-        self.btnLogout.clicked.connect(self._logout)
-
-        self._refresh_table()
+        self.btnAddAccount.clicked.connect(self.create_account)
+        self.btnDeposit.clicked.connect(self.deposit_ars)
+        self.btnBuy.clicked.connect(self.buy_currency)
+        self.btnSell.clicked.connect(self.sell_currency)
+        self.btnLogout.clicked.connect(self.logout)
+        self.refresh_table()
         self.statusBar().showMessage(f"Sesión: {self.user.username}", 3000)
 
-    def _refresh_table(self):
+    def refresh_table(self):
         self.AccountTable.setRowCount(0)
-        for moneda, cuenta in sorted(self.user.cuentas.items()):
+        for currency, account in sorted(self.user.cuentas.items()):
             row = self.AccountTable.rowCount()
             self.AccountTable.insertRow(row)
-            self.AccountTable.setItem(row, 0, QTableWidgetItem(moneda))
-            self.AccountTable.setItem(row, 1, QTableWidgetItem(str(cuenta.saldo)))
+            self.AccountTable.setItem(row, 0, QTableWidgetItem(currency))
+            self.AccountTable.setItem(row, 1, QTableWidgetItem(str(account.saldo)))
 
-    def _depositar_ars(self):
-        monto_str, ok = QInputDialog.getText(self, "Depósito de ARS", "Monto en ARS:")
+    def deposit_ars(self):
+        amount_str, ok = QInputDialog.getText(self, "Depósito de ARS", "Monto en ARS:")
         if not ok:
             return
-        mensaje = self.svc.depositar_ars(self.user, (monto_str or "").strip())
-        QMessageBox.information(self, "Depósito", mensaje)
-        self._refresh_table()
+        message = self.svc.depositar_ars(self.user, (amount_str or "").strip())
+        QMessageBox.information(self, "Depósito", message)
+        self.refresh_table()
 
-    def _crear_cuenta(self):
-        moneda, ok = QInputDialog.getText(self, "Crear cuenta", "Código de moneda (ej: USD, EUR):")
+    def create_account(self):
+        currency, ok = QInputDialog.getText(self, "Crear cuenta", "Código de moneda (ej: USD, EUR):")
         if not ok:
             return
-        moneda = (moneda or "").strip().upper()
-        if not moneda:
+        currency = (currency or "").strip().upper()
+        if not currency:
             QMessageBox.warning(self, "Crear cuenta", "Ingresá un código de moneda.")
             return
-
         rates = RatesRepository.load_rates()
-        if moneda in self.user.cuentas:
-            QMessageBox.warning(self, "Crear cuenta", f"Ya tenés una cuenta en {moneda}.")
+        if currency in self.user.cuentas:
+            QMessageBox.warning(self, "Crear cuenta", f"Ya tenés una cuenta en {currency}.")
             return
-        if moneda not in rates.keys():
-            QMessageBox.warning(self, "Crear cuenta", f"La moneda '{moneda}' no existe.")
+        if currency not in rates.keys():
+            QMessageBox.warning(self, "Crear cuenta", f"La moneda '{currency}' no está disponible en rates.json.")
             return
-
-        self.user.cuentas[moneda] = Cuenta(moneda, Decimal("0.00"))
+        self.user.cuentas[currency] = Cuenta(currency, Decimal("0.00"))
         self.svc.repo.save_user(self.user)
-        QMessageBox.information(self, "Crear cuenta", f"Cuenta en {moneda} creada.")
-        self._refresh_table()
+        QMessageBox.information(self, "Crear cuenta", f"Cuenta en {currency} creada.")
+        self.refresh_table()
 
-    def _comprar_moneda(self):
-        dlg = DialogComprar(self)
+    def buy_currency(self):
+        dlg = ChangeCurrencyDialog(self)
         if dlg.exec() != QDialog.DialogCode.Accepted:
             return
-
-        origen = (dlg.txtFrom.text() or "").strip().upper()
-        destino = (dlg.txtTo.text() or "").strip().upper()
-        monto_dest = (dlg.txtAmount.text() or "").strip()
-
-        if not origen or not destino or not monto_dest:
-            QMessageBox.warning(self, "Comprar", "Completá todos los campos.")
+        origin = (dlg.txtFrom.text() or "").strip().upper()
+        target = (dlg.txtTo.text() or "").strip().upper()
+        amount_target = (dlg.txtAmount.text() or "").strip()
+        if not origin or not target or not amount_target:
+            QMessageBox.warning(self, "Comprar moneda", "Completá todos los campos.")
             return
-        if origen == destino:
-            QMessageBox.warning(self, "Comprar", "Las monedas deben ser distintas.")
+        if origin == target:
+            QMessageBox.warning(self, "Comprar moneda", "Las monedas deben ser distintas.")
             return
-
         r = QMessageBox.question(
             self,
             "Confirmar compra",
-            f"¿Confirmás comprar {monto_dest} {destino} pagando desde {origen}?",
+            f"¿Confirmás comprar {amount_target} {target} pagando desde {origin}?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No
         )
         if r != QMessageBox.StandardButton.Yes:
-            QMessageBox.information(self, "Comprar", "Operación cancelada.")
+            QMessageBox.information(self, "Comprar moneda", "Operación cancelada.")
             return
+        message = self.svc.comprar_moneda(self.user, origin, target, amount_target)
+        QMessageBox.information(self, "Comprar moneda", message)
+        self.refresh_table()
 
-        mensaje = self.svc.comprar_moneda(self.user, origen, destino, monto_dest)
-        QMessageBox.information(self, "Comprar", mensaje)
-        self._refresh_table()
+    def sell_currency(self):
+        dlg = ChangeCurrencyDialog(self)
+        if dlg.exec() != QDialog.DialogCode.Accepted:
+            return
+        origin = (dlg.txtFrom.text() or "").strip().upper()
+        target = (dlg.txtTo.text() or "").strip().upper()
+        amount_origin = (dlg.txtAmount.text() or "").strip()
+        if not origin or not target or not amount_origin:
+            QMessageBox.warning(self, "Vender moneda", "Completá todos los campos.")
+            return
+        if origin == target:
+            QMessageBox.warning(self, "Vender moneda", "Las monedas deben ser distintas.")
+            return
+        r = QMessageBox.question(
+            self,
+            "Confirmar venta",
+            f"¿Confirmás vender {amount_origin} {origin} para recibir en {target}?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+        if r != QMessageBox.StandardButton.Yes:
+            QMessageBox.information(self, "Vender moneda", "Operación cancelada.")
+            return
+        message = self.svc.vender_moneda(self.user, origin, target, amount_origin)
+        QMessageBox.information(self, "Vender moneda", message)
+        self.refresh_table()
 
-    def _logout(self):
+    def logout(self):
         self.close()
         app = QApplication.instance()
         if app is not None:
